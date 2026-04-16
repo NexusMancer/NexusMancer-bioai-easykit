@@ -22,7 +22,7 @@ conda create -n easykit python=3.11
 
 conda activate easykit
 
-pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu126
+pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu126 
 
 conda install -c conda-forge mamba -y
 
@@ -32,7 +32,7 @@ pip show torch | grep -E '^Version:'
 pip show torchvision | grep -E '^Version:'
 pip show torchaudio | grep -E '^Version:'
 
-add torch torchvision torchaudio and their version to requirements.txt
+change/add torch torchvision torchaudio and their version to requirements.txt
 
 pip install -r requirements.txt
 
@@ -40,3 +40,6 @@ pip install -r requirements.txt
 # 5. Run the setup script (this automatically clones all tools + applies bug fixes)
 ./model_setup.py
 ```
+
+For other CUDA versions, CPU-only, or newer/older PyTorch releases, visit:  
+- [PyTorch Previous Versions](https://pytorch.org/get-started/previous-versions/) 
