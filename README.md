@@ -6,6 +6,11 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 
 ---
 
+For other CUDA versions, CPU-only, or newer/older PyTorch releases, visit:  
+- [PyTorch Previous Versions](https://pytorch.org/get-started/previous-versions/) 
+
+---
+
 ## Quick Start (3–5 minutes)
 
 ```bash
@@ -40,6 +45,3 @@ pip install -r requirements.txt
 # 5. Run the setup script (this automatically clones all tools + applies bug fixes)
 ./model_setup.py
 ```
-
-For other CUDA versions, CPU-only, or newer/older PyTorch releases, visit:  
-- [PyTorch Previous Versions](https://pytorch.org/get-started/previous-versions/) 
