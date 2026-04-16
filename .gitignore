@@ -34,8 +34,8 @@ data/*.pt
 # ================== Project-specific ignores ==================
 # Tool repositories that are cloned automatically by install.sh
 # We ignore everything inside tools/, but keep the empty folder via .gitkeep
-tools/
-!tools/.gitkeep
+/tools/*
+!/tools/.gitkeep
 
 # Temporary patch backup files
 *.patch.bak
