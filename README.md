@@ -8,18 +8,32 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 
 ## Progress
 
-Tracking support for single-cell BioAI models and tools, including perturbation, generative, and foundation-model-based methods.
+## Progress
 
-| scRNA-seq Perturbation Model / Tool | Status |
+| Model / Tool | Status |
 | :----------- | :----: |
-| ContextMean  | ⬜      |
-| PerturbMean  | ⬜      |
-| scVl         | ⬜      |
-| CPA          | ⬜      |
-| state        | ⬜      |
-| scgpt        | ⬜      |
-| state        | ⬜      |
-| scDFM        | ✅      |
+| **Protein Foundation / Structure Models** | — |
+| ESM-2 | ⬜ |
+| ESM-3 | ⬜ |
+| Protenix | ⬜ |
+| OpenFold | ⬜ |
+| **RNA / Genomics Foundation Models** | — |
+| RNA-FM | ⬜ |
+| Evo 2 | ⬜ |
+| Nucleotide Transformer | ⬜ |
+| DNABERT-2 | ⬜ |
+| **Single-Cell Foundation / Representation Models** | — |
+| scGPT | ⬜ |
+| scFoundation | ⬜ |
+| Geneformer | ⬜ |
+| scVI | ⬜ |
+| **Single-Cell Perturbation Models / Tools** | — |
+| scDFM | ✅ |
+| ContextMean | ⬜ |
+| PerturbMean | ⬜ |
+| CPA | ⬜ |
+| GEARS | ⬜ |
+| state | ⬜ |
 
 
 ---
