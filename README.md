@@ -8,8 +8,6 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 
 ## Progress
 
-## Progress
-
 | Model / Tool | Status |
 | :----------- | :----: |
 | **Protein Foundation / Structure Models** | — |
