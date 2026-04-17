@@ -6,8 +6,26 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 
 ---
 
+## Progress
+
+
+| Model / Tool | Status |
+| ------------ | ------ |
+| ContextMean  | ⬜      |
+| PerturbMean  | ⬜      |
+| scVl         | ⬜      |
+| CPA          | ⬜      |
+| state        | ⬜      |
+| scgpt        | ⬜      |
+| state        | ⬜      |
+| scDFM        | ✅      |
+
+
+---
+
 For other CUDA versions, CPU-only, or newer/older PyTorch releases, visit:  
-- [PyTorch Previous Versions](https://pytorch.org/get-started/previous-versions/) 
+
+- [PyTorch Previous Versions](https://pytorch.org/get-started/previous-versions/)
 
 ---
 
@@ -45,3 +63,4 @@ pip install -r requirements.txt
 # 5. Run the setup script (this automatically clones all tools + applies bug fixes)
 ./model_setup.sh
 ```
+
