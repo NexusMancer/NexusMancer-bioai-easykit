@@ -19,7 +19,7 @@ git clone https://github.com/NexusMancer/NexusMancer-bioai-easykit.git
 cd NexusMancer-bioai-easykit
 
 # 2. Make the setup script executable (important!)
-chmod +x model_setup.py
+chmod +x model_setup.sh
 
 # 3. Create the unified conda environment
 
@@ -43,5 +43,5 @@ pip install -r requirements.txt
 
 
 # 5. Run the setup script (this automatically clones all tools + applies bug fixes)
-./model_setup.py
+./model_setup.sh
 ```

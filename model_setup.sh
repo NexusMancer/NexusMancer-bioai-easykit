@@ -63,21 +63,21 @@ ensure_data_download() {
 }
 
 # ================== Clone and patch the required tools ==================
-clone_if_not_exists "state" "https://github.com/ArcInstitute/state.git"
-apply_patch "state"
+# clone_if_not_exists "state" "https://github.com/ArcInstitute/state.git"
+# apply_patch "state"
 
-clone_if_not_exists "state-reproduce" "https://github.com/ArcInstitute/state-reproduce.git"
-apply_patch "state-reproduce"
+# clone_if_not_exists "state-reproduce" "https://github.com/ArcInstitute/state-reproduce.git"
+# apply_patch "state-reproduce"
 
 clone_if_not_exists "scDFM" "https://github.com/AI4Science-WestlakeU/scDFM.git"
 apply_patch "scDFM"
 
 # ================== Download datasets ==================
-echo ""
-echo "📦 Downloading required datasets..."
+# echo ""
+# echo "📦 Downloading required datasets..."
 
-# Download Norman 2019 Perturb-seq dataset
-ensure_data_download "https://figshare.com/ndownloader/files/43390776" "dataset/perturbation/norman_2019.h5ad"
+# # Download Norman 2019 Perturb-seq dataset
+# ensure_data_download "https://figshare.com/ndownloader/files/43390776" "dataset/perturbation/norman_2019.h5ad"
 
 echo ""
 echo "🎉 Setup completed! All tools cloned, patched, and datasets are ready."

@@ -8,6 +8,7 @@ env/
 venv/
 .venv/
 ENV/
+*.py[cod]
 
 # Jupyter notebook cache
 .ipynb_checkpoints/
