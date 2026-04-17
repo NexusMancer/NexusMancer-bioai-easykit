@@ -24,12 +24,8 @@ dist/
 *.egg
 
 # Large data files (we use cloud storage instead)
-data/raw/*
-data/*.h5
-data/*.pt
-*.pdb
-*.cif
-*.fasta          # ignore if large; keep if small test data
+/data/*
+!/data/.gitkeep
 
 # ================== Project-specific ignores ==================
 # Tool repositories that are cloned automatically by install.sh
