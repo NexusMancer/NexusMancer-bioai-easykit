@@ -8,9 +8,10 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 
 ## Progress
 
+Tracking support for single-cell BioAI models and tools, including perturbation, generative, and foundation-model-based methods.
 
-| Model / Tool | Status |
-| ------------ | ------ |
+| scRNA-seq Perturbation Model / Tool | Status |
+| :----------- | :----: |
 | ContextMean  | ⬜      |
 | PerturbMean  | ⬜      |
 | scVl         | ⬜      |
