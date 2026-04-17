@@ -51,7 +51,7 @@ ensure_data_download() {
   # Download the file (skip if it already exists)
   if [ ! -f "$dest" ]; then
     echo "Downloading $(basename "$dest") from figshare..."
-    echo "   → Saving to: $dest"
+    echo "   -> Saving to: $dest"
     curl -L --progress-bar -o "$dest" "$url" || {
       echo "❌ Download failed for $dest"
       return 1

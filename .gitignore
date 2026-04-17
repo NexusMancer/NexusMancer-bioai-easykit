@@ -24,8 +24,8 @@ dist/
 *.egg
 
 # Large data files (we use cloud storage instead)
-/data/*
-!/data/.gitkeep
+/dataset/*
+!/dataset/.gitkeep
 
 # ================== Project-specific ignores ==================
 # Tool repositories that are cloned automatically by install.sh
