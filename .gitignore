@@ -38,7 +38,8 @@ dist/
 
 # Logs and temporary outputs
 *.log
-results/
+/results/*
+!/results/.gitkeep
 outputs/
 tmp/
 temp/
