@@ -77,7 +77,7 @@ echo ""
 echo "📦 Downloading required datasets..."
 
 # Download Norman 2019 Perturb-seq dataset
-ensure_data_download "https://figshare.com/ndownloader/files/43390776" "data/perturbation/norman_2019.h5ad"
+ensure_data_download "https://figshare.com/ndownloader/files/43390776" "dataset/perturbation/norman_2019.h5ad"
 
 echo ""
 echo "🎉 Setup completed! All tools cloned, patched, and datasets are ready."
