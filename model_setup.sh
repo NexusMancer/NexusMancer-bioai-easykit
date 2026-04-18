@@ -80,4 +80,14 @@ apply_patch "scDFM"
 # ensure_data_download "https://figshare.com/ndownloader/files/43390776" "dataset/perturbation/norman_2019.h5ad"
 
 echo ""
-echo "🎉 Setup completed! All tools cloned, patched, and datasets are ready."
+echo "🔄 Preprocessing Norman dataset..."
+
+if python3 data_processing/norman_preprocessing_pipeline.py; then
+  echo "✅ Norman dataset preprocessing completed successfully"
+else
+  echo "❌ Norman dataset preprocessing failed"
+  exit 1
+fi
+
+echo ""
+echo "🎉 Setup completed! All tools cloned, patched, datasets are ready, and preprocessing is done."

@@ -1,5 +1,7 @@
 # NexusMancer-bioai-easykit
 
+[![Codebase GitHub](https://img.shields.io/badge/Codebase-GitHub-1f1f1f?logo=github&logoColor=white&labelColor=555555&style=flat)](https://github.com/NexusMancer/NexusMancer-bioai-easykit)
+
 **For biologists**: A beginner-friendly toolkit that makes cloning, setting up, and running public BioAI repositories super easy through a **unified workflow**.
 
 If there’s a model or tool you’d like to run but can’t find here, feel free to reach out — I’d be more than happy to help add it.
@@ -8,30 +10,31 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 
 ## Progress
 
-| Model / Tool | Status |
-| :----------- | :----: |
-| **Protein Foundation / Structure Models** | — |
-| ESM-2 | ⬜ |
-| ESM-3 | ⬜ |
-| Protenix | ⬜ |
-| OpenFold | ⬜ |
-| **RNA / Genomics Foundation Models** | — |
-| RNA-FM | ⬜ |
-| Evo 2 | ⬜ |
-| Nucleotide Transformer | ⬜ |
-| DNABERT-2 | ⬜ |
-| **Single-Cell Foundation / Representation Models** | — |
-| scGPT | ⬜ |
-| scFoundation | ⬜ |
-| Geneformer | ⬜ |
-| scVI | ⬜ |
-| **Single-Cell Perturbation Models / Tools** | — |
-| scDFM | ✅ |
-| ContextMean | ⬜ |
-| PerturbMean | ⬜ |
-| CPA | ⬜ |
-| GEARS | ⬜ |
-| state | ⬜ |
+
+| Model / Tool                                       | Status |
+| -------------------------------------------------- | ------ |
+| **Protein Foundation / Structure Models**          | —      |
+| ESM-2                                              | ⬜      |
+| ESM-3                                              | ⬜      |
+| Protenix                                           | ⬜      |
+| OpenFold                                           | ⬜      |
+| **RNA / Genomics Foundation Models**               | —      |
+| RNA-FM                                             | ⬜      |
+| Evo 2                                              | ⬜      |
+| Nucleotide Transformer                             | ⬜      |
+| DNABERT-2                                          | ⬜      |
+| **Single-Cell Foundation / Representation Models** | —      |
+| scGPT                                              | ⬜      |
+| scFoundation                                       | ⬜      |
+| Geneformer                                         | ⬜      |
+| scVI                                               | ⬜      |
+| **Single-Cell Perturbation Models / Tools**        | —      |
+| scDFM                                              | ✅      |
+| ContextMean                                        | ⬜      |
+| PerturbMean                                        | ⬜      |
+| CPA                                                | ⬜      |
+| GEARS                                              | ⬜      |
+| state                                              | ⬜      |
 
 
 ---
