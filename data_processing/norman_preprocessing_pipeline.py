@@ -109,21 +109,28 @@ def condition_is_valid(condition, vocab_tokens, allowed_special_tokens=None):
 
 
 def step_1_prepare_obs(adata):
-    """Step 1: Prepare observation metadata.
+    """Step 1: Prepare observation metadata for State model training/inference.
     
-    Based on 'guide_merged' column, generates:
-    - condition: Copy of guide_merged values
-    - control: Binary indicator (1 if guide_merged == "ctrl", 0 otherwise)
-    - cell_type: Copy of gene_program values
+    This function processes the 'guide_merged' column to create the columns
+    required by the State model (especially 'pert_col'):
+    
+    - 'condition': Copy of the original 'guide_merged' values
+    - 'pert_col': Standardized perturbation column.
+                  All control conditions (detected via keywords,
+                  case-insensitive) are converted to "non-targeting".
+                  *** IMPORTANT: Converted to pandas Categorical at the end ***
+    - 'control': Binary indicator (1 = control, 0 = perturbed)
+    - 'cell_type': Copy of 'gene_program' values (also Categorical)
+    - 'gem_group': Copy of 'gemgroup' (if exists, also Categorical)
     
     Args:
         adata: AnnData object to prepare.
         
     Returns:
-        AnnData: Updated object with new condition, cell_type, and control columns.
+        AnnData: Updated AnnData object with new standardized columns in .obs.
         
     Raises:
-        ValueError: If 'guide_merged' column is not found.
+        ValueError: If 'guide_merged' column is not found in adata.obs.
     """
     print("\n" + "="*60)
     print("STEP 1: Prepare observation metadata")
@@ -134,27 +141,63 @@ def step_1_prepare_obs(adata):
             f"Missing 'guide_merged' column in obs. Available columns: {list(adata.obs.columns)}"
         )
 
-    # Extract guide_merged column as string type
-    gm_raw = adata.obs["guide_merged"].astype(str)
-    
-    # Extract gene_program column as string type
-    gp_raw = adata.obs["gene_program"].astype(str)
-    
-    # Create condition column as copy of guide_merged
-    adata.obs["condition"] = gm_raw.copy()
-    
-    # Create control column: 1 if guide_merged == "ctrl", 0 otherwise
-    adata.obs["control"] = (gm_raw.str.strip() == "ctrl").astype(int)
+    # Extract raw columns as string type (with stripping for safety)
+    gm_raw = adata.obs["guide_merged"].astype(str).str.strip()
+    gp_raw = adata.obs["gene_program"].astype(str).str.strip()
 
-    # Create cell_type column as copy of gene_program
+    # Create condition column as direct copy of guide_merged (preserves original)
+    adata.obs["condition"] = gm_raw.copy()
+
+    # Create pert_col (the key column required by State model)
+    adata.obs["pert_col"] = gm_raw.copy()
+
+    # ===================================================================
+    # CONTROL STANDARDIZATION LOGIC (case-insensitive keyword matching)
+    # ===================================================================
+    control_keywords = ["ctrl", "control", "Control", "CTRL", "Control"]
+
+    # Create mask for control cells
+    lower_pert = adata.obs["pert_col"].str.lower()
+    is_control = lower_pert.apply(
+        lambda x: any(kw.lower() in x for kw in control_keywords)
+    )
+
+    # Replace all detected control values with "non-targeting"
+    adata.obs.loc[is_control, "pert_col"] = "non-targeting"
+
+    # Create binary control column
+    adata.obs["control"] = is_control.astype(int)
+
+    # Create cell_type column
     adata.obs["cell_type"] = gp_raw.copy()
+
+    # Optional: create gem_group
+    if "gemgroup" in adata.obs.columns:
+        gm_group_raw = adata.obs["gemgroup"].astype(str).str.strip()
+        adata.obs["gem_group"] = gm_group_raw.copy()
+        print(f"√ Created 'gem_group' column (copy of gemgroup)")
+        print(f"   - Unique gemgroup values: {adata.obs['gemgroup'].nunique()}")
+    else:
+        print(f"X 'gemgroup' column not found, skipping gem_group creation")
+    
+    # ===================================================================
+    # CRITICAL FIX: Convert to Categorical dtype (required by cell_load / State)
+    # ===================================================================
+    # This is what was missing - without it, .h5ad will not have /categories
+    adata.obs["pert_col"] = adata.obs["pert_col"].astype("category")
+    adata.obs["cell_type"] = adata.obs["cell_type"].astype("category")
+    if "gem_group" in adata.obs.columns:
+        adata.obs["gem_group"] = adata.obs["gem_group"].astype("category")
     
     print(f"√ Created 'condition' column (copy of guide_merged)")
+    print(f"√ Created 'pert_col' column (controls standardized to 'non-targeting')")
+    print(f"  - Standardized to 'non-targeting': {is_control.sum()} cells")
     print(f"√ Created 'control' column (binary indicator)")
-    print(f"  - control=1: {(adata.obs['control'] == 1).sum()} cells")
-    print(f"  - control=0: {(adata.obs['control'] == 0).sum()} cells")
-    print(f"√ Created 'cell_type' column (copy of gene_program values)")
-    
+    print(f"  - control=1: {is_control.sum()} cells")
+    print(f"  - control=0: {(~is_control).sum()} cells")
+    print(f"√ Created 'cell_type' column (copy of gene_program)")
+    print(f"√ Converted 'pert_col', 'cell_type' (and 'gem_group' if exists) to Categorical dtype")
+
     return adata
 
 

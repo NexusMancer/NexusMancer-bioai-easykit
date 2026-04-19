@@ -1,0 +1,129 @@
+diff --git a/src/state/_cli/_tx/_preprocess_train.py b/src/state/_cli/_tx/_preprocess_train.py
+old mode 100644
+new mode 100755
+index 8d9d9f8..1ae30e2
+--- a/src/state/_cli/_tx/_preprocess_train.py
++++ b/src/state/_cli/_tx/_preprocess_train.py
+@@ -1,4 +1,13 @@
++import numpy as np
+ import argparse as ap
++from scipy import sparse
++from pathlib import Path
++
++PROJECT_ROOT = Path(__file__).resolve().parents[6]
++DATA_PATH = PROJECT_ROOT / 'dataset' / 'perturbation'
++INPUT_PATH = PROJECT_ROOT / 'dataset' / 'perturbation' / 'norman.h5ad'
++OUTPUT_PATH = PROJECT_ROOT / 'dataset' / 'perturbation' / 'norman_preprocessed.h5ad'
++NUM_HVGS = 2000
+ 
+ 
+ def add_arguments_preprocess_train(parser: ap.ArgumentParser):
+@@ -6,23 +15,67 @@ def add_arguments_preprocess_train(parser: ap.ArgumentParser):
+     parser.add_argument(
+         "--adata",
+         type=str,
+-        required=True,
++        default=str(INPUT_PATH),
+         help="Path to input AnnData file (.h5ad)",
+     )
+     parser.add_argument(
+         "--output",
+         type=str,
+-        required=True,
++        default=str(OUTPUT_PATH),
+         help="Path to output preprocessed AnnData file (.h5ad)",
+     )
+     parser.add_argument(
+         "--num_hvgs",
+         type=int,
+-        required=True,
++        default=NUM_HVGS,
+         help="Number of highly variable genes to select",
+     )
+ 
+ 
++def _sample_values(X, n=100000):
++    """Randomly sample a subset of values from the matrix (supports sparse matrices)."""
++    if sparse.issparse(X):
++        values = X.data
++    else:
++        values = np.asarray(X).ravel()
++
++    if values.size == 0:
++        return values
++
++    if values.size > n:
++        rng = np.random.default_rng(0)
++        idx = rng.choice(values.size, size=n, replace=False)
++        values = values[idx]
++
++    return values
++
++
++def is_already_log1p(adata) -> bool:
++    """Check whether the AnnData object has likely already been log1p-transformed."""
++    # 1. Scanpy may record log1p information in adata.uns
++    if "log1p" in adata.uns:
++        return True
++
++    values = _sample_values(adata.X)
++    if values.size == 0:
++        return False
++
++    # 2. Negative values indicate the matrix has already been transformed
++    if np.nanmin(values) < 0:
++        return True
++
++    positive = values[values > 0]
++    if positive.size == 0:
++        return False
++
++    # 3. A large fraction of non-integer values suggests the data
++    # is not raw counts and has likely already been log1p-transformed
++    frac_part = np.abs(positive - np.round(positive))
++    non_integer_ratio = np.mean(frac_part > 1e-6)
++
++    return non_integer_ratio > 0.1
++
++
+ def run_tx_preprocess_train(adata_path: str, output_path: str, num_hvgs: int):
+     """
+     Preprocess training data by normalizing, log-transforming, and selecting highly variable genes.
+@@ -42,11 +95,14 @@ def run_tx_preprocess_train(adata_path: str, output_path: str, num_hvgs: int):
+     logger.info(f"Loading AnnData from {adata_path}")
+     adata = ad.read_h5ad(adata_path)
+ 
+-    logger.info("Normalizing total counts per cell")
+-    sc.pp.normalize_total(adata)
++    if is_already_log1p(adata):
++        logger.warning("adata.X seems to be already log-transformed. Skipping normalize_total() and log1p().")
++    else:
++        logger.info("Normalizing total counts per cell")
++        sc.pp.normalize_total(adata)
+ 
+-    logger.info("Applying log1p transformation")
+-    sc.pp.log1p(adata)
++        logger.info("Applying log1p transformation")
++        sc.pp.log1p(adata)
+ 
+     logger.info(f"Finding top {num_hvgs} highly variable genes")
+     sc.pp.highly_variable_genes(adata, n_top_genes=num_hvgs)
+@@ -58,3 +114,18 @@ def run_tx_preprocess_train(adata_path: str, output_path: str, num_hvgs: int):
+     adata.write_h5ad(output_path)
+ 
+     logger.info(f"Preprocessing complete. Selected {adata.var.highly_variable.sum()} highly variable genes.")
++
++
++if __name__ == "__main__":
++    print("processing...")
++    parser = ap.ArgumentParser(
++        description="Preprocess training data: normalize, log1p, select HVGs"
++    )
++    add_arguments_preprocess_train(parser)
++    args = parser.parse_args()
++    run_tx_preprocess_train(
++        adata_path=args.adata,
++        output_path=args.output,
++        num_hvgs=args.num_hvgs
++    )
++    print("done!")

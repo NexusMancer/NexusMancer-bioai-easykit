@@ -34,7 +34,7 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 | PerturbMean                                        | ⬜      |
 | CPA                                                | ⬜      |
 | GEARS                                              | ⬜      |
-| state                                              | ⬜      |
+| state                                              | ✅      |
 
 
 ---

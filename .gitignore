@@ -38,7 +38,8 @@ dist/
 *.patch.bak
 
 # Logs and temporary outputs
-*.log
+/logs/*
+!/logs/.gitkeep
 /results/*
 !/results/.gitkeep
 outputs/
@@ -47,3 +48,12 @@ temp/
 
 # Conda environment lock file (do not upload local environment)
 environment.yml.lock
+
+# ====================== Weights & Biases (wandb) ======================
+wandb/
+.wandb/
+wandb.log
+*.wandb
+wandb-metadata.json
+wandb-debug.log
+wandb-summary.json
