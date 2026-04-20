@@ -1,0 +1,34 @@
+#!/bin/bash
+set -e
+
+echo "=== Starting State model zero-shot training (dynamic paths) ==="
+
+# ==================== Automatically detect project root directory (most robust way) ====================
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$( cd "${SCRIPT_DIR}/../.." && pwd )"
+
+echo "📍 Project root detected: ${PROJECT_ROOT}"
+
+# Define paths using relative/dynamic paths
+EXAMPLES_DIR="${PROJECT_ROOT}/tools/state/examples"
+OUTPUT_DIR="${PROJECT_ROOT}/tools/state"
+
+# Ensure the examples directory exists
+mkdir -p "$EXAMPLES_DIR"
+
+echo "🚀 Running training with dynamic paths..."
+
+state tx train \
+  data.kwargs.toml_config_path="${EXAMPLES_DIR}/zeroshot.toml" \
+  data.kwargs.embed_key=X_hvg \
+  data.kwargs.pert_col=pert_col \
+  data.kwargs.control_pert=non-targeting \
+  data.kwargs.cell_type_key=cell_type \
+  +data.kwargs.train_task=scgpt_zeroshot \
+  training.max_steps=40000 \
+  training.batch_size=8 \
+  model=scgpt-genetic \
+  output_dir="${OUTPUT_DIR}" \
+  name="scgpt-genetic_zeroshot"
+
+echo "=== Training completed! Output saved to: ${OUTPUT_DIR} ==="

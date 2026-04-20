@@ -57,3 +57,5 @@ wandb.log
 wandb-metadata.json
 wandb-debug.log
 wandb-summary.json
+
+tea_debug.log

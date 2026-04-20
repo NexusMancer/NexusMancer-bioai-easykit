@@ -1,0 +1,35 @@
+diff --git a/src/state/_cli/_tx/_train.py b/src/state/_cli/_tx/_train.py
+index 2a939d6..47cc6d5 100644
+--- a/src/state/_cli/_tx/_train.py
++++ b/src/state/_cli/_tx/_train.py
+@@ -1,3 +1,4 @@
++import os
+ import argparse as ap
+ 
+ from omegaconf import DictConfig, OmegaConf
+@@ -88,7 +89,15 @@ def run_tx_train(cfg: DictConfig):
+ 
+         model_dir = Path(cfg["model"]["kwargs"]["pretrained_path"])
+ 
+-        vocab_file = model_dir / "vocab.json"
++        # vocab_file = model_dir / "vocab.json"
++        if "PROJECT_ROOT" in os.environ:
++            PROJECT_ROOT = Path(os.environ["PROJECT_ROOT"])
++        else:
++            PROJECT_ROOT = Path(__file__).resolve().parents[6]
++
++        vocab_file = PROJECT_ROOT / "tools/scDFM/src/tokenizer/norman_5000_highly_vocab.json"
++
++        print(f"√ Using custom dynamic vocab: {vocab_file}")
+ 
+         vocab = json.load(open(vocab_file, "r"))
+         cfg["model"]["kwargs"]["pad_token_id"] = vocab["<pad>"]
+@@ -165,7 +174,7 @@ def run_tx_train(cfg: DictConfig):
+         pickle.dump(var_dims, f)
+ 
+     if cfg["model"]["name"].lower() in ["cpa", "scvi"] or cfg["model"]["name"].lower().startswith("scgpt"):
+-        cfg["model"]["kwargs"]["n_cell_types"] = len(data_module.celltype_onehot_map)
++        cfg["model"]["kwargs"]["n_cell_types"] = len(data_module.cell_type_onehot_map)
+         cfg["model"]["kwargs"]["n_perts"] = len(data_module.pert_onehot_map)
+         cfg["model"]["kwargs"]["n_batches"] = len(data_module.batch_onehot_map)
+ 

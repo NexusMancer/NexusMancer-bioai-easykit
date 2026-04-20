@@ -1,0 +1,21 @@
+diff --git a/src/state/configs/model/scgpt-genetic.yaml b/src/state/configs/model/scgpt-genetic.yaml
+index 85d02f8..ae285c4 100644
+--- a/src/state/configs/model/scgpt-genetic.yaml
++++ b/src/state/configs/model/scgpt-genetic.yaml
+@@ -24,6 +24,7 @@ kwargs:
+   cell_emb_style: "cls"
+   mvc_decoder_style: "inner product, detach"
+   use_amp: true
++  from_scratch: true
+   pretrained_path: "/large_storage/goodarzilab/userspace/mohsen/scGPT/scGPT_human/"
+   load_param_prefixes:
+     - "encoder"
+@@ -43,4 +44,5 @@ kwargs:
+   perturbation_type: genetic
+   seed: 2025
+   cell_sentence_len: 2048
+-  nb_decoder: false
+\ No newline at end of file
++  nb_decoder: false
++  step_size_lr: 1
+\ No newline at end of file
