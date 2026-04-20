@@ -1,0 +1,20 @@
+diff --git a/src/state/tx/utils/__init__.py b/src/state/tx/utils/__init__.py
+index e4fcf9a..32c9267 100644
+--- a/src/state/tx/utils/__init__.py
++++ b/src/state/tx/utils/__init__.py
+@@ -254,6 +254,15 @@ def get_lightning_module(model_type: str, data_config: dict, model_config: dict,
+     elif model_type.lower() == "cpa":
+         from ...tx.models.cpa import CPAPerturbationModel
+ 
++        # CPA model only supports gene-level output
++        if module_config.get("output_space") != "gene":
++            logger = logging.getLogger(__name__)
++            logger.warning(
++                f"CPA model only supports gene-level output, but output_space was set to '{module_config.get('output_space')}'. "
++                "Overriding to 'gene'."
++            )
++        module_config["output_space"] = "gene"
++
+         return CPAPerturbationModel(
+             input_dim=var_dims["input_dim"],
+             output_dim=var_dims["output_dim"],

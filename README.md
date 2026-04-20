@@ -29,12 +29,14 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 | Geneformer                                         | ⬜      |
 | scVI                                               | ⬜      |
 | **Single-Cell Perturbation Models / Tools**        | —      |
-| scDFM                                              | ✅      |
-| ContextMean                                        | ⬜      |
-| PerturbMean                                        | ⬜      |
-| CPA                                                | ⬜      |
-| GEARS                                              | ⬜      |
+| state_repo-ContextMean                             | ⬜      |
+| state_repo-PerturbMean                             | ⬜      |
+| state_repo-scGPT                                   | ⬜      |
+| state_repo-scVI                                    | ✅      |
+| state_repo-CPA                                     | ✅      |
 | state                                              | ✅      |
+| scDFM                                              | ✅      |
+| GEARS                                              | ⬜      |
 
 
 ---
