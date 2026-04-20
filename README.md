@@ -31,7 +31,7 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 | **Single-Cell Perturbation Models / Tools**        | —      |
 | ContextMean-state_repo                             | ⬜      |
 | PerturbMean-state_repo                             | ⬜      |
-| scGPT-state_repo                                   | ⬜      |
+| scGPT-state_repo                                   | 😭      |
 | scVI-state_repo                                    | ✅      |
 | CPA-state_repo                                     | ✅      |
 | state                                              | ✅      |
