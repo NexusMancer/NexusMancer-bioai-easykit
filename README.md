@@ -24,16 +24,14 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 | Nucleotide Transformer                             | ⬜      |
 | DNABERT-2                                          | ⬜      |
 | **Single-Cell Foundation / Representation Models** | —      |
-| scGPT                                              | ⬜      |
+| scGPT                                              | 😭      |
 | scFoundation                                       | ⬜      |
 | Geneformer                                         | ⬜      |
-| scVI                                               | ⬜      |
+| scVI                                               | ✅      |
 | **Single-Cell Perturbation Models / Tools**        | —      |
-| ContextMean-state_repo                             | ⬜      |
-| PerturbMean-state_repo                             | ⬜      |
-| scGPT-state_repo                                   | 😭      |
-| scVI-state_repo                                    | ✅      |
-| CPA-state_repo                                     | ✅      |
+| ContextMean                                        | ⬜      |
+| PerturbMean                                        | ⬜      |
+| CPA                                                | ✅      |
 | state                                              | ✅      |
 | scDFM                                              | ✅      |
 | GEARS                                              | ⬜      |
