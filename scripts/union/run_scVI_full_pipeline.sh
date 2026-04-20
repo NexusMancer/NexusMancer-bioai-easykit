@@ -1,11 +1,11 @@
 #!/bin/bash
 # =============================================================================
-# State Model One-Stop Full Pipeline (Setup -> Preprocess -> Train)
+# scVI Model One-Stop Full Pipeline (Setup -> Preprocess -> Train)
 #
 # Purpose: Sequentially execute the following three core scripts to achieve
 #          one-click workflow from environment setup -> data preprocessing
 #          -> zero-shot training.
-# Location: scripts/union/run_state_full_pipeline.sh
+# Location: scripts/union/run_scVI_full_pipeline.sh
 #
 # NOTE: This version uses DYNAMIC PROJECT_ROOT detection
 #       (no more hard-coded path)
@@ -15,17 +15,17 @@ set -e  # Exit immediately if any command fails
 
 # ====================== Dynamic Project Root Detection ======================
 # Automatically detect PROJECT_ROOT based on the script's own location
-# (Script path: ${PROJECT_ROOT}/scripts/union/run_state_full_pipeline.sh)
+# (Script path: ${PROJECT_ROOT}/scripts/union/run_scVI_full_pipeline.sh)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 # ====================== Configuration ======================
-LOG_FILE="${PROJECT_ROOT}/logs/state_full_pipeline_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="${PROJECT_ROOT}/logs/scVI_full_pipeline_$(date +%Y%m%d_%H%M%S).log"
 
 # Paths to the three core scripts (now using dynamic PROJECT_ROOT)
-SCRIPT_SETUP="${PROJECT_ROOT}/scripts/model_setups/setup_state.sh"
+SCRIPT_SETUP="${PROJECT_ROOT}/scripts/model_setups/setup_scVI.sh"
 SCRIPT_PREPROCESS="${PROJECT_ROOT}/scripts/data_processing/data_processing_state.sh"
-SCRIPT_TRAIN="${PROJECT_ROOT}/scripts/train/train_state_zeroshot.sh"
+SCRIPT_TRAIN="${PROJECT_ROOT}/scripts/train/train_scVI_zeroshot.sh"
 
 # ====================== Helper Functions ======================
 log() {
@@ -45,7 +45,7 @@ check_script() {
 
 # ====================== Main Pipeline ======================
 echo "=================================================================="
-log "🚀 Starting State Model One-Stop Full Pipeline"
+log "🚀 Starting scVI Model One-Stop Full Pipeline"
 log "📍 Detected Project Root: $PROJECT_ROOT"
 log "📝 Log File: $LOG_FILE"
 echo "=================================================================="
@@ -71,13 +71,13 @@ time bash "$SCRIPT_PREPROCESS"
 log "✅ Data preprocessing completed"
 
 # 4. Run Zero-Shot Training
-log "🔥 Step 3/4: Running Zero-Shot Training -> train_state_zeroshot.sh"
+log "🔥 Step 3/4: Running Zero-Shot Training -> train_scVI_zeroshot.sh"
 time bash "$SCRIPT_TRAIN"
 log "✅ Training completed!"
 
 # ====================== Final Summary ======================
 echo "=================================================================="
-log "🎉 Full Pipeline executed successfully! State Model workflow completed."
+log "🎉 Full Pipeline executed successfully! scVI Model workflow completed."
 echo "=================================================================="
 
 # Calculate and display total runtime
@@ -87,7 +87,7 @@ log "⏱️  Total pipeline duration: $(date -d@${duration} -u +%H:%M:%S)"
 
 echo "💡 Next steps:"
 echo "   View training log : cat $LOG_FILE"
-echo "   Check model output: ls ${PROJECT_ROOT}/output/state_tx/"
-echo "   Rerun pipeline    : ./run_state_full_pipeline.sh"
+echo "   Check model output: ls ${PROJECT_ROOT}/output/scVI_tx/"
+echo "   Rerun pipeline    : ./run_scVI_full_pipeline.sh"
 
 exit 0
