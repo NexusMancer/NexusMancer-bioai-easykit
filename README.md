@@ -31,6 +31,7 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 | **Single-Cell Perturbation Models / Tools**        | —      | — |
 | ContextMean                                        | ⬜      | Internal baseline |
 | PerturbMean                                        | ⬜      | Internal baseline |
+| lrlm                                               | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce) |
 | CPA                                                | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce) |
 | state                                              | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state) |
 | scDFM                                              | ✅      | [AI4Science-WestlakeU/scDFM](https://github.com/AI4Science-WestlakeU/scDFM) |

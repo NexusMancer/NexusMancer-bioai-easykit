@@ -27,6 +27,15 @@ dist/
 # Large data files (we use cloud storage instead)
 /dataset/*
 !/dataset/.gitkeep
+*h5ad
+*h5
+*h5py
+*h5py.File
+*h5py.Group
+*h5py.Dataset
+*h5py.Attribute
+*h5py.ExternalLink
+*h5py.SoftLink
 
 # ================== Project-specific ignores ==================
 # Tool repositories that are cloned automatically by install.sh
