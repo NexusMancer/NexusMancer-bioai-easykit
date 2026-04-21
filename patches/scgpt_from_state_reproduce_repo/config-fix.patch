@@ -1,0 +1,26 @@
+diff --git a/baselines/state_sets_reproduce/configs/model/scgpt-chemical.yaml b/baselines/state_sets_reproduce/configs/model/scgpt-chemical.yaml
+index 7c29638..6f7f5c2 100644
+--- a/baselines/state_sets_reproduce/configs/model/scgpt-chemical.yaml
++++ b/baselines/state_sets_reproduce/configs/model/scgpt-chemical.yaml
+@@ -24,6 +24,8 @@ kwargs:
+   cell_emb_style: "cls"
+   mvc_decoder_style: "inner product, detach"
+   use_amp: true
++  # Set true to skip loading best_model.pt from pretrained_path (random init).
++  from_scratch: true
+   pretrained_path: "/large_storage/goodarzilab/userspace/mohsen/scGPT/scGPT_human/"
+   load_param_prefixes:
+     - "encoder"
+diff --git a/baselines/state_sets_reproduce/configs/model/scgpt-genetic.yaml b/baselines/state_sets_reproduce/configs/model/scgpt-genetic.yaml
+index 7f0092c..2387630 100644
+--- a/baselines/state_sets_reproduce/configs/model/scgpt-genetic.yaml
++++ b/baselines/state_sets_reproduce/configs/model/scgpt-genetic.yaml
+@@ -24,6 +24,8 @@ kwargs:
+   cell_emb_style: "cls"
+   mvc_decoder_style: "inner product, detach"
+   use_amp: true
++  # Set true to skip loading best_model.pt from pretrained_path (random init).
++  from_scratch: true
+   pretrained_path: "/large_storage/goodarzilab/userspace/mohsen/scGPT/scGPT_human/"
+   load_param_prefixes:
+     - "encoder"

@@ -11,30 +11,30 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 ## Progress
 
 
-| Model / Tool                                       | Status |
-| -------------------------------------------------- | ------ |
-| **Protein Foundation / Structure Models**          | —      |
-| ESM-2                                              | ⬜      |
-| ESM-3                                              | ⬜      |
-| Protenix                                           | ⬜      |
-| OpenFold                                           | ⬜      |
-| **RNA / Genomics Foundation Models**               | —      |
-| RNA-FM                                             | ⬜      |
-| Evo 2                                              | ⬜      |
-| Nucleotide Transformer                             | ⬜      |
-| DNABERT-2                                          | ⬜      |
-| **Single-Cell Foundation / Representation Models** | —      |
-| scGPT                                              | 😭      |
-| scFoundation                                       | ⬜      |
-| Geneformer                                         | ⬜      |
-| scVI                                               | ✅      |
-| **Single-Cell Perturbation Models / Tools**        | —      |
-| ContextMean                                        | ⬜      |
-| PerturbMean                                        | ⬜      |
-| CPA                                                | ✅      |
-| state                                              | ✅      |
-| scDFM                                              | ✅      |
-| GEARS                                              | ⬜      |
+| Model / Tool                                       | Status | Repository |
+| -------------------------------------------------- | ------ | ---------- |
+| **Protein Foundation / Structure Models**          | —      | — |
+| ESM-2                                              | ⬜      | [facebookresearch/esm](https://github.com/facebookresearch/esm) |
+| ESM-3                                              | ⬜      | [evolutionaryscale/esm](https://github.com/evolutionaryscale/esm) |
+| Protenix                                           | ⬜      | [bytedance/Protenix](https://github.com/bytedance/Protenix) |
+| OpenFold                                           | ⬜      | [aqlaboratory/openfold](https://github.com/aqlaboratory/openfold) |
+| **RNA / Genomics Foundation Models**               | —      | — |
+| RNA-FM                                             | ⬜      | [ml4bio/RNA-FM](https://github.com/ml4bio/RNA-FM) |
+| Evo 2                                              | ⬜      | [ArcInstitute/evo2](https://github.com/ArcInstitute/evo2) |
+| Nucleotide Transformer                             | ⬜      | [instadeepai/nucleotide-transformer](https://github.com/instadeepai/nucleotide-transformer) |
+| DNABERT-2                                          | ⬜      | [MAGICS-LAB/DNABERT_2](https://github.com/MAGICS-LAB/DNABERT_2) |
+| **Single-Cell Foundation / Representation Models** | —      | — |
+| scGPT                                              | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce) |
+| scFoundation                                       | ⬜      | [biomap-research/scFoundation](https://github.com/biomap-research/scFoundation) |
+| Geneformer                                         | ⬜      | [jkobject/geneformer](https://github.com/jkobject/geneformer) |
+| scVI                                               | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce) |
+| **Single-Cell Perturbation Models / Tools**        | —      | — |
+| ContextMean                                        | ⬜      | Internal baseline |
+| PerturbMean                                        | ⬜      | Internal baseline |
+| CPA                                                | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce) |
+| state                                              | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state) |
+| scDFM                                              | ✅      | [AI4Science-WestlakeU/scDFM](https://github.com/AI4Science-WestlakeU/scDFM) |
+| GEARS                                              | 🚧    | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce) |
 
 
 ---
