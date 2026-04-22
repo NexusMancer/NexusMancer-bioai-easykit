@@ -1,0 +1,298 @@
+diff --git a/baselines/state_sets_reproduce/configs/model/gears.yaml b/baselines/state_sets_reproduce/configs/model/gears.yaml
+index 6a1ba3e..b14f00a 100644
+--- a/baselines/state_sets_reproduce/configs/model/gears.yaml
++++ b/baselines/state_sets_reproduce/configs/model/gears.yaml
+@@ -11,6 +11,6 @@ kwargs:
+   num_similar_genes_go_graph: 20
+   uncertainty_reg: 1.0
+   direction_lambda: 0.15
+-  coexpression_graph_path: /large_storage/ctc/userspace/mohsen/state_revisions/gears_prep/replogle_coexpression.csv
++  coexpression_graph_path: ${oc.env:PROJECT_ROOT}/dataset/gears_cache/norman_coexpression.csv
+   go_graph_url: https://dataverse.harvard.edu/api/access/datafile/6934319
+   pert_type: genetic
+diff --git a/baselines/state_sets_reproduce/models/gears/coexpression.py b/baselines/state_sets_reproduce/models/gears/coexpression.py
+index 27b1b60..70e013e 100644
+--- a/baselines/state_sets_reproduce/models/gears/coexpression.py
++++ b/baselines/state_sets_reproduce/models/gears/coexpression.py
+@@ -1,10 +1,17 @@
+ """
+ Reference: https://github.com/snap-stanford/GEARS/blob/master/gears/utils.py
++Modified: complete runnable script for Norman dataset to satisfy training
+ """
+ 
+ import os
+ import pandas as pd
+ import numpy as np
++import anndata as ad
++from pathlib import Path
++import logging
++
++logger = logging.getLogger(__name__)
++
+ 
+ def np_pearson_cor(x, y):
+     xv = x - x.mean(axis=0)
+@@ -29,17 +36,7 @@ def get_coexpression_network_from_train(
+ ):
+     """
+     Infer co-expression network from training data
+-
+-    Args:
+-        adata (anndata.AnnData): anndata object
+-        threshold (float): threshold for co-expression
+-        k (int): number of edges to keep
+-        data_path (str): path to data
+-        data_name (str): name of dataset
+-        split (str): split of dataset
+-        seed (int): seed for random number generator
+-        train_gene_set_size (int): size of training gene set
+-        set2conditions (dict): dictionary of perturbations to conditions
++    (Original function - only small change for Norman control)
+     """
+ 
+     fname = os.path.join(
+@@ -57,16 +54,23 @@ def get_coexpression_network_from_train(
+     )
+ 
+     if os.path.exists(fname):
++        logger.info(f"Found existing co-expression network at {fname}")
+         return pd.read_csv(fname)
+     else:
+         gene_list = [f for f in adata.var.gene_name.values]
+         idx2gene = dict(zip(range(len(gene_list)), gene_list))
+         X = adata.X
+         train_perts = set2conditions["train"]
+-        X_tr = X[np.isin(adata.obs.condition, [i for i in train_perts if "ctrl" in i])]
+-        gene_list = adata.var["gene_name"].values
+-
+-        X_tr = X_tr.toarray()
++        
++        # Modified for Norman: support both "ctrl" and "non-targeting"
++        ctrl_conditions = [i for i in train_perts if "ctrl" in i or "non-targeting" in i]
++        if len(ctrl_conditions) == 0:
++            logger.warning("No control conditions found, using all samples instead.")
++            X_tr = X
++        else:
++            X_tr = X[np.isin(adata.obs.condition, ctrl_conditions)]
++        
++        X_tr = X_tr.toarray() if hasattr(X_tr, "toarray") else X_tr
+         out = np_pearson_cor(X_tr, X_tr)
+         out[np.isnan(out)] = 0
+         out = np.abs(out)
+@@ -86,3 +90,50 @@ def get_coexpression_network_from_train(
+         )
+         df_co_expression.to_csv(fname, index=False)
+         return df_co_expression
++
++
++if __name__ == "__main__":
++    # ==================== PROJECT_ROOT detection (same as go.py) ====================
++    if "PROJECT_ROOT" in os.environ:
++        PROJECT_ROOT = Path(os.environ["PROJECT_ROOT"])
++    else:
++        PROJECT_ROOT = Path(__file__).resolve().parents[6]
++    
++    cache_dir = PROJECT_ROOT / "dataset" / "gears_cache"
++    cache_dir.mkdir(parents=True, exist_ok=True)
++    
++    # Load Norman data
++    adata_path = PROJECT_ROOT / "dataset" / "perturbation" / "norman_preprocessed.h5ad"
++    logger.info(f"Loading adata from {adata_path}")
++    adata = ad.read_h5ad(adata_path)
++    
++    # GEARS typical parameters
++    threshold = 0.0
++    k = 50
++    data_path = str(PROJECT_ROOT / "dataset")
++    data_name = "perturbation"
++    split = "train"
++    seed = 42
++    train_gene_set_size = 1997
++    
++    # Simple set2conditions for training split (all conditions are used for co-expression)
++    set2conditions = {"train": adata.obs["condition"].unique().tolist()}
++    
++    logger.info("Computing co-expression similarity graph...")
++    df = get_coexpression_network_from_train(
++        adata=adata,
++        threshold=threshold,
++        k=k,
++        data_path=data_path,
++        data_name=data_name,
++        split=split,
++        seed=seed,
++        train_gene_set_size=train_gene_set_size,
++        set2conditions=set2conditions,
++    )
++    
++    # Save as the exact name that lightning.py is looking for
++    norman_path = cache_dir / "norman_coexpression.csv"
++    df.to_csv(norman_path, index=False)
++    logger.info(f"Co-expression graph successfully saved to:\n   {norman_path}")
++    logger.info("You can now run your training command again!")
+\ No newline at end of file
+diff --git a/baselines/state_sets_reproduce/models/gears/go.py b/baselines/state_sets_reproduce/models/gears/go.py
+index 5a7e070..03b0c3c 100644
+--- a/baselines/state_sets_reproduce/models/gears/go.py
++++ b/baselines/state_sets_reproduce/models/gears/go.py
+@@ -6,34 +6,58 @@ import os
+ import pickle
+ import pandas as pd
+ import tempfile
++import logging
++from pathlib import Path
+ 
+ from .io import tar_data_download_wrapper, dataverse_download
+ 
+ 
+ def load_go_graph(url: str, k: int):
+     """
+-    Load the GO graph from harvard dataverse
++    Load the GO graph from Harvard Dataverse.
++    Improved version: Uses persistent local cache + built-in logger.
++    """
++    logger = logging.getLogger(__name__)   # ← 解决 logger 未定义
+ 
+-    Args:
+-        url: url of the GO graph
+-        k: number of edges to keep for each gene
++    # ==================== PROJECT_ROOT detection (same as before) ====================
++    if "PROJECT_ROOT" in os.environ:
++        PROJECT_ROOT = Path(os.environ["PROJECT_ROOT"])
++    else:
++        PROJECT_ROOT = Path(__file__).resolve().parents[6]
++    
++    cache_dir = PROJECT_ROOT / "dataset" / "gears_cache"
++    cache_dir.mkdir(parents=True, exist_ok=True)
++    
++    # Final cached CSV path
++    cached_csv = cache_dir / "go_essential_all" /"go_essential_all.csv"
++    # =============================================================================
+ 
+-    Returns:
+-        df_out: pandas dataframe of the GO graph
+-    """
+-    with tempfile.TemporaryDirectory() as temp_dir:
+-        tar_data_download_wrapper(
+-            url, os.path.join(temp_dir, "go_essential_all"), temp_dir
+-        )
+-        df_jaccard = pd.read_csv(
+-            os.path.join(temp_dir, "go_essential_all/go_essential_all.csv")
+-        )
+-
+-        df_out = (
+-            df_jaccard.groupby("target")
+-            .apply(lambda x: x.nlargest(k + 1, ["importance"]))
+-            .reset_index(drop=True)
+-        )
++    # Check cache first
++    if cached_csv.exists():
++        logger.info("Found local cache for GO similarity graph.")
++        df_jaccard = pd.read_csv(cached_csv)
++    else:
++        logger.info("Local GO cache not found. Downloading and extracting from Dataverse...")
++        with tempfile.TemporaryDirectory() as temp_dir:
++            tar_data_download_wrapper(
++                url, 
++                os.path.join(temp_dir, "go_essential_all"), 
++                temp_dir
++            )
++            df_jaccard = pd.read_csv(
++                os.path.join(temp_dir, "go_essential_all/go_essential_all.csv")
++            )
++            
++            # Save to persistent cache
++            df_jaccard.to_csv(cached_csv, index=False)
++            logger.info(f"GO graph cached to {cached_csv}")
++
++    # Original processing logic (unchanged)
++    df_out = (
++        df_jaccard.groupby("target")
++        .apply(lambda x: x.nlargest(k + 1, ["importance"]))
++        .reset_index(drop=True)
++    )
+ 
+     return df_out
+ 
+@@ -43,21 +67,51 @@ def load_gene2go(
+     essential_genes_url: str = 'https://dataverse.harvard.edu/api/access/datafile/6934320'
+ ):
+     """
+-    Load the gene2go dictionary from harvard dataverse
++    Load the gene2go dictionary from Harvard Dataverse.
++    Improved version: Uses persistent local cache to avoid downloading every time
++    and bypass temporary directory issues.
+     """
+-    with tempfile.TemporaryDirectory() as temp_dir:
+-        download_path = os.path.join(temp_dir, 'gene2go_all.pkl')
+-        dataverse_download(gene2go_url,
+-                           download_path)
+-        with open(download_path, 'rb') as f:
++    # ==================== Robust PROJECT_ROOT detection ====================
++    # Uses your suggested logic (supports PROJECT_ROOT env var or auto-detect)
++    if "PROJECT_ROOT" in os.environ:
++        PROJECT_ROOT = Path(os.environ["PROJECT_ROOT"])
++    else:
++        PROJECT_ROOT = Path(__file__).resolve().parents[6]
++    
++    cache_dir = PROJECT_ROOT / "dataset" / "gears_cache"
++    gene2go_path = cache_dir / 'gene2go_all.pkl'
++    essential_path = cache_dir / 'essential_all_data_pert_genes.pkl'
++    # =====================================================================
++
++    logger = logging.getLogger(__name__)
++
++    # Check if local cache exists (this will be used on all future runs)
++    if gene2go_path.exists() and essential_path.exists():
++        logger.info("Found local cache for gene2go and essential genes.")
++        with open(gene2go_path, 'rb') as f:
+             gene2go = pickle.load(f)
+-            
+-        download_path = os.path.join(temp_dir, 'essential_all_data_pert_genes.pkl')
+-        dataverse_download(essential_genes_url,
+-                           download_path)
+-        with open(download_path, 'rb') as f:
++        with open(essential_path, 'rb') as f:
+             essential_genes = pickle.load(f)
++    else:
++        # First-time download only
++        logger.info("Local cache not found. Downloading from Dataverse...")
++        with tempfile.TemporaryDirectory() as temp_dir:
++            dataverse_download(gene2go_url, str(Path(temp_dir) / 'gene2go_all.pkl'))
++            with open(Path(temp_dir) / 'gene2go_all.pkl', 'rb') as f:
++                gene2go = pickle.load(f)
+             
++            dataverse_download(essential_genes_url, str(Path(temp_dir) / 'essential_all_data_pert_genes.pkl'))
++            with open(Path(temp_dir) / 'essential_all_data_pert_genes.pkl', 'rb') as f:
++                essential_genes = pickle.load(f)
++        
++        # Save to persistent cache for future runs
++        with open(gene2go_path, 'wb') as f:
++            pickle.dump(gene2go, f)
++        with open(essential_path, 'wb') as f:
++            pickle.dump(essential_genes, f)
++        logger.info(f"Downloaded and cached locally to {cache_dir}")
++
++    # Original filtering logic (unchanged)
+     gene2go = {i: gene2go[i] for i in essential_genes if i in gene2go}
+ 
+     return gene2go
+diff --git a/baselines/state_sets_reproduce/models/gears/io.py b/baselines/state_sets_reproduce/models/gears/io.py
+index e400501..b70e56f 100644
+--- a/baselines/state_sets_reproduce/models/gears/io.py
++++ b/baselines/state_sets_reproduce/models/gears/io.py
+@@ -77,7 +77,6 @@ def tar_data_download_wrapper(url, save_path, data_path):
+         logger.info("Done!")
+ 
+ 
+-
+ def dataverse_download(url, save_path):
+     """
+     Dataverse download helper with progress bar
+@@ -99,4 +98,4 @@ def dataverse_download(url, save_path):
+             for data in response.iter_content(block_size):
+                 progress_bar.update(len(data))
+                 file.write(data)
+-        progress_bar.close()
+\ No newline at end of file
++        progress_bar.close()

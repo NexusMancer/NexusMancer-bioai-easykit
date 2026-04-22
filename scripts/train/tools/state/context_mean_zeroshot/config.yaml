@@ -1,0 +1,91 @@
+data:
+  name: PerturbationDataModule
+  kwargs:
+    toml_config_path: /home/shisk/NexusMancer-bioai-easykit/scripts/train/tools/state/examples/zeroshot.toml
+    embed_key: X_hvg
+    output_space: all
+    pert_rep: onehot
+    basal_rep: sample
+    num_workers: 12
+    pin_memory: true
+    n_basal_samples: 1
+    downsample: null
+    downsample_cells: null
+    additional_obs: []
+    basal_mapping_strategy: random
+    should_yield_control_cells: true
+    batch_col: gem_group
+    pert_col: pert_col
+    cell_type_key: cell_type
+    control_pert: non-targeting
+    map_controls: true
+    perturbation_features_file: null
+    store_raw_basal: false
+    int_counts: false
+    barcode: true
+    use_consecutive_loading: false
+    val_subsample_fraction: 1.0
+  output_dir: null
+  debug: true
+model:
+  name: context_mean
+  checkpoint: null
+  device: cuda
+  kwargs:
+    cell_set_len: 512
+    hidden_dim: 512
+    cell_sentence_len: 512
+    loss: energy
+    n_encoder_layers: 4
+    n_decoder_layers: 4
+    predict_residual: true
+    softplus: false
+    freeze_pert_backbone: false
+    transformer_decoder: false
+    finetune_vci_decoder: false
+    batch_encoder: false
+    distributional_loss: energy
+    transformer_backbone_key: GPT2
+    transformer_backbone_kwargs:
+      n_positions: 512
+      n_embd: 512
+      d_inner: 1024
+      n_layer: 8
+      n_head: 8
+      resid_pdrop: 0.0
+      embd_pdrop: 0.0
+      attn_pdrop: 0.0
+      use_cache: false
+training:
+  wandb_track: true
+  weight_decay: 0.0005
+  batch_size: 8
+  lr: 0.0001
+  max_steps: 40000
+  train_seed: 42
+  val_freq: 2000
+  ckpt_every_n_steps: 2000
+  gradient_clip_val: 10
+  gradient_accumulation_steps: 1
+  loss_fn: mse
+  devices: 1
+  strategy: auto
+  use_mfu: false
+  mfu_kwargs:
+    available_flops: 60000000000000.0
+    use_backward: true
+    logging_interval: 10
+    window_size: 2
+  cumulative_flops_use_backward: true
+wandb:
+  entity: your_entity_name
+  project: state
+  local_wandb_dir: ./wandb_logs
+  tags: []
+name: context_mean_zeroshot
+output_dir: /home/shisk/NexusMancer-bioai-easykit/scripts/train/tools/state
+use_wandb: true
+overwrite: false
+return_adatas: false
+pred_adata_path: null
+true_adata_path: null

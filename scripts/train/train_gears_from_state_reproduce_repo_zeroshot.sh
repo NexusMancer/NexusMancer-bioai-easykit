@@ -17,6 +17,9 @@ DATA_TOML_PATH="${PROJECT_ROOT}/configs/zeroshot.toml"
 OUTPUT_DIR="${PROJECT_ROOT}/logs/gears_norman/"
 
 echo "✅ Project root detected: $PROJECT_ROOT"
+
+export PROJECT_ROOT
+
 echo "✅ State-reproduce baselines directory: $STATE_BASELINES_DIR"
 echo ""
 
