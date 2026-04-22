@@ -16,7 +16,7 @@ DATASET_DIR="${PROJECT_ROOT}/dataset/perturbation"
 INPUT_ADATA="${DATASET_DIR}/norman_2019_adata.h5ad"
 VOCAB_FILE="${PROJECT_ROOT}/tools/scDFM/src/tokenizer/norman_5000_highly_vocab.json"
 INTERMEDIATE_H5AD="${DATASET_DIR}/norman.h5ad"
-PREPROCESSED_H5AD="${DATASET_DIR}/norman_preprocessed_4baseline.h5ad"
+PREPROCESSED_H5AD="${DATASET_DIR}/norman_preprocessed.h5ad"
 
 # ==================== 3. Run the preprocessing pipeline ====================
 echo "🚀 Starting Norman data preprocessing pipeline..."
