@@ -1,6 +1,6 @@
 # NexusMancer-bioai-easykit
 
-[Codebase GitHub](https://github.com/NexusMancer/NexusMancer-bioai-easykit)
+[![Codebase GitHub](https://img.shields.io/badge/Codebase-GitHub-1f1f1f?logo=github&logoColor=white&labelColor=555555&style=flat)](https://github.com/NexusMancer/NexusMancer-bioai-easykit)
 
 **For biologists**: A beginner-friendly toolkit that makes cloning, setting up, and running public BioAI repositories super easy through a **unified workflow**.
 
