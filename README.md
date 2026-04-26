@@ -29,8 +29,8 @@ If there’s a model or tool you’d like to run but can’t find here, feel fre
 | scGPT                                              | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce)                       |
 | scVI                                               | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce)                       |
 | **Single-Cell Perturbation Models / Tools**        | —      | —                                                                                           |
-| ContextMean                                        | 🚧     | Internal baseline                                                                           |
-| PerturbMean                                        | 🚧     | Internal baseline                                                                           |
+| ContextMean                                        | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce)                       |
+| PerturbMean                                        | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce)                       |
 | lrlm                                               | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce)                       |
 | CPA                                                | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce)                       |
 | GEARS                                              | ✅      | [ArcInstitute/state](https://github.com/ArcInstitute/state-reproduce)                       |
