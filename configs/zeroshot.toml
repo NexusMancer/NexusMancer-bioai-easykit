@@ -1,17 +1,15 @@
-# Dataset paths - maps dataset names to their directories
 [datasets]
-example = "/home/shisk/NexusMancer-bioai-easykit/dataset/perturbation/norman_preprocessed.h5ad"
+rice = "/home/shisk/data/rice/h5ad/h5ad_sunfy/ano_v1_kit_2048_state_ready_obsprocessed.h5ad"
 
-# Training specifications
-# All cell types in a dataset automatically go into training (excluding zeroshot/fewshot overrides)
 [training]
-example = "train"
+rice = "train"
 
-# Zeroshot specifications - entire cell types go to val or test
-[zeroshot]
-"example.FOSB+CEBPB" = "test"
-"example.CEBPB+CEBPA" = "test"
-"example.JUN+CEBPA" = "test"
-
-# Fewshot specifications - explicit perturbation lists
-[fewshot]
+[fewshot."rice.kitaake"]
+val = [ 
+    "LOC_Os02g04430", "LOC_Os07g35690", "LOC_Os05g41370", 
+    "LOC_Os07g36780", "LOC_Os01g12420"
+]
+test = [ 
+    "LOC_Os07g35370", "LOC_Os07g35790", "LOC_Os01g48040", 
+    "LOC_Os04g53994", "LOC_Os05g03450"
+]

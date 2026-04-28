@@ -21,6 +21,7 @@ echo "🚀 Running training with dynamic paths..."
 state tx train \
   data.kwargs.toml_config_path="${CONDIGS_DIR}/zeroshot_4baseline.toml" \
   data.kwargs.embed_key=X_hvg \
+  data.kwargs.output_space=gene \
   data.kwargs.pert_col=pert_col \
   data.kwargs.control_pert=non-targeting \
   data.kwargs.cell_type_key=cell_type \
